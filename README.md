@@ -1,2 +1,4 @@
 # managementConsole
-odoo module to display server
+odoo module to display server details
+
+- proxmox version
