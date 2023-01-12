@@ -1,0 +1,48 @@
+<odoo>
+  <data>
+    <record id="wizzard_pmc_form" model="ir.ui.view">
+      <field name="name">wizzard.pmc.form</field>
+      <field name="model">wizzard.pmc</field>
+      <field name="mode">primary</field>
+      <field name="inherit_id" ref="multi_step_wizard.multi_step_wizard_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//footer" position="before">
+          
+          <group name="login" attrs="{'invisible': [('state', '!=', 'start')]}">
+            <div>Login:</div>
+            <field name="host"/>
+            <field name="user"/>
+            <field name="password"/>
+          </group>
+          
+          <group name="gui" attrs="{'invisible': [('state', '!=', 'gui')]}">
+            
+              <h2>Proxmox Management Console</h2>
+              <p>version: </p>
+            <field name="version"/>
+
+            </group>
+
+        </xpath>
+      </field>
+    </record>
+
+
+    <record id="wizzard_pmc_action" model="ir.actions.act_window">
+      <field name="name">PMC</field>
+      <field name="res_model">wizzard.pmc</field>
+      <field name="view_mode">form</field>
+      <field name="target">new</field>
+    </record>
+
+    
+    <!--Menu -->
+    <menuitem id="wizzard_pmc_menu"
+      name="PMC"
+      parent="wizzard_menu_root"
+      action="wizzard_pmc_action"
+      sequence="1" />
+   
+
+  </data>
+</odoo>
