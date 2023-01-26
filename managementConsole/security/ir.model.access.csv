@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mmc_pmc_user,mmc.pmc,model_mmc_pmc,base.group_user,1,1,1,1
+access_mmc_optout_user,mmc.optout,model_mmc_optout,base.group_user,1,1,1,1

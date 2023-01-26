@@ -1,8 +1,8 @@
 <odoo>
   <data>
-    <record id="wizzard_pmc_form" model="ir.ui.view">
-      <field name="name">wizzard.pmc.form</field>
-      <field name="model">wizzard.pmc</field>
+    <record id="mmc_pmc_form" model="ir.ui.view">
+      <field name="name">mmc.pmc.form</field>
+      <field name="model">mmc.pmc</field>
       <field name="mode">primary</field>
       <field name="inherit_id" ref="multi_step_wizard.multi_step_wizard_form"/>
       <field name="arch" type="xml">
@@ -19,7 +19,7 @@
             
               <h2>Proxmox Management Console</h2>
               <p>version: </p>
-            <field name="version"/>
+            <field name="version" attrs="{'readonly':True}"/>
 
             </group>
 
@@ -27,20 +27,27 @@
       </field>
     </record>
 
+    <!--Parent Menu -->
+    <menuitem id="mmc_menu_root"
+      parent="base.menu_management"
+      name="Management Console"
+      sequence="7"
+    />
+    
 
-    <record id="wizzard_pmc_action" model="ir.actions.act_window">
+    <record id="mmc_pmc_action" model="ir.actions.act_window">
       <field name="name">PMC</field>
-      <field name="res_model">wizzard.pmc</field>
+      <field name="res_model">mmc.pmc</field>
       <field name="view_mode">form</field>
       <field name="target">new</field>
     </record>
 
     
     <!--Menu -->
-    <menuitem id="wizzard_pmc_menu"
+    <menuitem id="mmc_pmc_menu"
       name="PMC"
-      parent="wizzard_menu_root"
-      action="wizzard_pmc_action"
+      parent="mmc_menu_root"
+      action="mmc_pmc_action"
       sequence="1" />
    
 

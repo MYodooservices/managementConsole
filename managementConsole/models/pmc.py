@@ -16,7 +16,7 @@ from proxmoxer import ProxmoxAPI
 
 
 class PMC(models.TransientModel):
-    _name = 'wizzard.pmc'
+    _name = 'mmc.pmc'
     _inherit = ['multi.step.wizard.mixin'] 
 
     host = fields.Char(string='proxmox host with port', required=True)
@@ -27,15 +27,20 @@ class PMC(models.TransientModel):
 
 
     def getVersion(self):
-        #proxmox = ProxmoxAPI(
-        #    self.host, user=self.user, password=self.password, verify_ssl=False
-        #)
-        self.version = "--"
-        #proxmox.version.get()
+        proxmox = ProxmoxAPI(
+            self.host, user=self.user, password=self.password, verify_ssl=False
+        )
+        self.version = proxmox.version.get()
         print(self.version)
-        #print("pve update: ")
-        #print(proxmox.nodes("pve").apt.update)
+        print("pve update: ")
+        print(proxmox.nodes("pve").apt.update)
         print("--")
+
+        for node in proxmox.nodes.get():
+            for vm in proxmox.nodes(node["node"]).lxc.get():
+                print("{0}. {1} => {2}".format(vm["vmid"], vm["name"], vm["status"]))
+
+        #proxmox.nodes("pve").lxc("102").clone.post(newid="106")
 
 
 

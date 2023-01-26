@@ -14,6 +14,7 @@
     'data': [
       'security/ir.model.access.csv',
       'views/pmc_views.xml',
+      'views/optout_views.xml',
     ],    
     'license': 'LGPL-3',
     'support': 'mail@myodoo.services'
