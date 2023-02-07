@@ -4,10 +4,14 @@
     <record id="mmc_optout_form" model="ir.ui.view">
       <field name="name">mmc.optout.form</field>
       <field name="model">mmc.optout</field>
+      <field name="mode">primary</field>
+      <field name="inherit_id" ref="multi_step_wizard.multi_step_wizard_form"/>
       <field name="arch" type="xml">
-      
-        <form string="Opt Out">
-          <group name="main">
+        <xpath expr="//footer" position="before">
+
+          
+          
+          <group name="start" >
             <p>file of all mail addresses which should be edited (csv)</p>
             <field name="csv_file" filename="file_name"/> 
             <field name="file_name" invisible="1"/> 
@@ -19,21 +23,18 @@
             <field name="field_name"/> 
             <field name="field_operator"/> 
             <field name="field_value"/>  -->
-
-            <h1>Schreibe:</h1>
-            <field name="field_writeField"/> 
-            <field name="field_writeValue"/> 
             <field name="field_selection"/>
+            <field name="field_writeValue" attrs="{'invisible': [('state', '!=', 'start')]}"/> 
+
+            <!-- <field name="many2One_id" attrs="{'invisible': [('state', '!=', 'many2One')]}" /> -->
+            <field name="field_boolean" attrs="{'invisible':[('state', '!=', 'boolean')]}" />
+            
+            
           </group>
 
-          
+       </xpath>   
 
-          <footer>
-              <button name="update_users" type="object"
-                      string="update" class="oe_highlight"/>
-              <button special="cancel" string="Cancel"/>
-        </footer>
-        </form>
+          
       </field>  
 
     </record>
@@ -41,7 +42,7 @@
    
 
     <record id="mmc_optout_action" model="ir.actions.act_window">
-      <field name="name">Opt Out</field>
+      <field name="name">Contact Update</field>
       <field name="res_model">mmc.optout</field>
       <field name="view_mode">form</field>
       <field name="target">new</field>
@@ -50,7 +51,7 @@
     
     <!--Menu -->
     <menuitem id="mmc_optout_menu"
-      name="Opt Out"
+      name="Contact Update"
       parent="mmc_menu_root"
       action="mmc_optout_action"
       sequence="1" 

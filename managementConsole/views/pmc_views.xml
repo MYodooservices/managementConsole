@@ -28,15 +28,15 @@
     </record>
 
     <!--Parent Menu -->
+     <!-- parent="base.menu_management" -->
     <menuitem id="mmc_menu_root"
-      parent="base.menu_management"
       name="Management Console"
       sequence="7"
     />
     
 
     <record id="mmc_pmc_action" model="ir.actions.act_window">
-      <field name="name">PMC</field>
+      <field name="name">Proxmox</field>
       <field name="res_model">mmc.pmc</field>
       <field name="view_mode">form</field>
       <field name="target">new</field>
@@ -45,7 +45,7 @@
     
     <!--Menu -->
     <menuitem id="mmc_pmc_menu"
-      name="PMC"
+      name="Proxmox"
       parent="mmc_menu_root"
       action="mmc_pmc_action"
       sequence="1" />
