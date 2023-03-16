@@ -24,6 +24,7 @@ class optout(models.TransientModel):
     field_value = fields.Char(string='')
 
     field_writeValue = fields.Char(string='field value')
+    field_company_id = fields.Many2one('res.partner', 'company_id')
 
     many2One_id = fields.Many2one('res.country', string="many2one", create=False) 
 
@@ -58,7 +59,18 @@ class optout(models.TransientModel):
 
     field_selection = fields.Many2one('ir.model.fields', string="field", create=False,  domain=[("model", "=", "res.partner")] )  #fields.Selection(_get_selection, 'field name')
 
-    
+    def bulk_update (self):
+        print("bulk update")
+
+        active_ids = self._context.get('active_ids', []) or []
+        for record in self.env['res.partner'].browse(active_ids):
+            #record.website = "manuelmarco.xyz"
+            print("company: ")
+            print(self.field_company_id.name)
+            print(self.field_company_id.id)
+            record.parent_id = self.field_company_id.id
+        
+
 
     def update_users(self):
         print("update users by csv file")
