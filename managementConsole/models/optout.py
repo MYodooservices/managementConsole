@@ -24,9 +24,14 @@ class optout(models.TransientModel):
     field_value = fields.Char(string='')
 
     field_writeValue = fields.Char(string='field value')
-    field_company_id = fields.Many2one('res.partner', 'company_id')
+    
 
     many2One_id = fields.Many2one('res.country', string="many2one", create=False) 
+
+    
+    #bulk update needed fields
+    record_template = fields.Many2one('res.partner', 'name')
+    field_selection = fields.Many2one('ir.model.fields', string="field", create=False,  domain=[("model", "=", "res.partner")] )  
 
     #many2One =  fields.Char("City", related='many2One_id.name') 
 
@@ -42,6 +47,29 @@ class optout(models.TransientModel):
         
         return lst
     
+    global cnt
+    cnt = 0
+    global dynamic_list
+    dynamic_list = []
+
+    def _get_dynamic_selection(self):
+        global cnt
+        global dynamic_list
+
+
+        for i in range(1,5):
+            dynamic_list.append((str(cnt),str(i)))
+            cnt=cnt+1
+
+        return dynamic_list
+    
+    
+    dynamic_selection = fields.Selection(_get_dynamic_selection, 'field name')
+    
+ 
+    
+
+
     def _get_filtered_selection(self):
         #journal_obj = self.pool.get('ir.model.fields')
         #journal_ids = journal_obj.search(cr, uid, [], context=context)
@@ -57,18 +85,27 @@ class optout(models.TransientModel):
       
     field_boolean = fields.Boolean('boolean')    
 
-    field_selection = fields.Many2one('ir.model.fields', string="field", create=False,  domain=[("model", "=", "res.partner")] )  #fields.Selection(_get_selection, 'field name')
+    
 
     def bulk_update (self):
         print("bulk update")
-
+        f = self.field_selection.name
         active_ids = self._context.get('active_ids', []) or []
         for record in self.env['res.partner'].browse(active_ids):
+           
+
             #record.website = "manuelmarco.xyz"
-            print("company: ")
-            print(self.field_company_id.name)
-            print(self.field_company_id.id)
-            record.parent_id = self.field_company_id.id
+            print("selected field: ")
+            print(self.field_selection)
+            print("selected record: ")
+            print(self.record_template)
+            print("field of record:")
+            print(self.record_template[f])
+            #record.parent_id = self.field_company_id.id
+
+            
+            #record._fields[f] = self.record_template._fields[f]
+            record.write({f: self.record_template[f]}) #sset 
         
 
 
@@ -97,42 +134,13 @@ class optout(models.TransientModel):
             #if field_type=='many2one':
                 #show many2One field
 
-            if(self.state == "boolean"):
-                if(not self.field_boolean):
-                    other_model_record.write({self.field_selection.name: False})
-                else:
-                    other_model_record.write({self.field_selection.name: True})
-            elif(field_type == 'many2one'):
-                other_model_record.write({self.field_selection.name: int(self.field_writeValue)})
-            else:
-                other_model_record.write({self.field_selection.name: self.field_writeValue})
+            other_model_record.write({self.field_selection.name: self.field_writeValue})
             #print(len(other_model_record))
 
             #for user in users:
             #    print("user: ", user)
 
-    
-    @api.model
-    def _selection_state(self):
-        return [
-            ('start', 'Start'),
-            ('many2One', 'many2One'),
-            ('boolean', 'Boolean'),
-            ('loaded', 'Loaded')
-        ]
-
-    @api.onchange('field_selection')
-    def check_field_type(self):
-        if(self.field_selection.ttype == "boolean"):
-            self.state = 'boolean'
-        else:
-            self.state = 'start'
-
-    def state_exit_start(self):
-        self.update_users()
-    
-    def state_exit_boolean(self):
-        self.update_users()
+   
    
         
   
